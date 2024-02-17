@@ -8,10 +8,10 @@
 
 std::string path = "users/";
 
-bool search_user(std::string login)
+bool search_user(std::string* login)
 {
     std::ifstream exist;
-    exist.open(path+login+".txt");
+    exist.open(path + *login + ".txt");
     
     if (exist) // If file exist
     {   
@@ -26,10 +26,10 @@ bool search_user(std::string login)
 }
 
 
-void User::load_user(std::string login)
+void User::load_user(std::string* login)
 {
     std::ifstream load;
-    load.open(path+login+".txt");
+    load.open(path + *login + ".txt");
     if (load.is_open())
     {   
         std::string* data[5] {&this->login, &this->password, &this->name, &this->email, &this->phone};
@@ -43,10 +43,10 @@ void User::load_user(std::string login)
         }
     }
 }
-std::string User::password_hash(std::string password)
+std::string User::password_hash(std::string* password)
 {
 
-    return password;
+    return *password;
 }
 
 
@@ -61,7 +61,7 @@ User::User(std::string login, std::string password, std::string name, std::strin
 }
 User::User(std::string login)
 {
-    load_user(login);
+    load_user(&login);
 }
 void User::save_user() const
 {
@@ -78,15 +78,15 @@ void User::save_user() const
     save.close();
     std::cout << "Account has been saved" << std::endl;
 }
-bool User::password_validation(std::string password)
+bool User::password_validation(std::string* password)
 {   
-    password = password_hash(password);
-    if (this->password == password)
+    std::string hash_password = password_hash(password);
+    if (hash_password == this->password )
         return 1;
     else
         return 0;
 }
-void User::change_name(std::string new_name)
+void User::change_name()
 {
     std::cout << "Enter new name: ";
     std::cin >> this->name;
@@ -96,7 +96,7 @@ void User::change_email()
     std::string new_email {};
     std::cout << "Enter new email: ";
     std::cin >> new_email;
-    if (is_valid_email(new_email))
+    if (is_valid_email(&new_email))
     {
         this->email = new_email;
         std::cout << "Email change successful" << std::endl;
@@ -106,17 +106,17 @@ void User::change_email()
         std::cout << "Email is not valid. Try again" << std::endl;
     }
 }
-void User::change_password(std::string old_password)
+void User::change_password(std::string* old_password)
 {
-    old_password = password_hash(old_password);
-    if (old_password == this->password)
+    std::string hash_old_password = password_hash(old_password);
+    if (hash_old_password == this->password)
     {
         std::string new_password {};
         std::cout << "Enter new password: ";
         std::cin >> new_password;
-        if (is_valid_password(new_password))
+        if (is_valid_password(&new_password))
         {
-            this->password = password_hash(new_password);
+            this->password = password_hash(&new_password);
             std::cout << "Password change successful" << std::endl;
         }
         else
@@ -127,10 +127,10 @@ void User::change_password(std::string old_password)
         }
     }
 }
-void User::change_phone(std::string phone)
+void User::change_phone(std::string* phone)
 {
     if (is_valid_phone(phone))
-        this->phone = phone;
+        this->phone = *phone;
     else
     {
         std::cout << "Phone number is not valid. Try again" << std::endl;
