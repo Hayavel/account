@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 
+
 #ifndef USER_H
 #define USER_H
 
@@ -27,11 +28,15 @@ public:
     User(std::string login);
 
     void save_user() const;
+    bool delete_user() const;
     bool password_validation(std::string*);
     void change_name();
     void change_email();
     void change_password(std::string*);
-    void change_phone(std::string*);
+    void change_phone();
+    std::string get_name();
+    std::string get_email();
+    std::string get_phone();
 };
 
 #endif

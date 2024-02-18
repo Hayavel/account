@@ -6,6 +6,7 @@
 #include <fstream>
 
 
+
 std::string path = "users/";
 
 bool search_user(std::string* login)
@@ -43,6 +44,7 @@ void User::load_user(std::string* login)
         }
     }
 }
+
 std::string User::password_hash(std::string* password)
 {
 
@@ -59,10 +61,12 @@ User::User(std::string login, std::string password, std::string name, std::strin
     this->phone = phone;
     std::cout << "Account has been created" << std::endl;
 }
+
 User::User(std::string login)
 {
     load_user(&login);
 }
+
 void User::save_user() const
 {
     std::ofstream save;
@@ -78,6 +82,22 @@ void User::save_user() const
     save.close();
     std::cout << "Account has been saved" << std::endl;
 }
+
+bool User::delete_user() const
+{
+    std::string answer {};
+    std::cout << "Are you sure you want to delete your account?[Y/n]: ";
+    std::cin >> answer;
+    if (answer == "Y")
+    {
+        std::remove((path+login+".txt").c_str());
+        std::cout << "Account has been deleted" << std::endl;
+        return 1;
+    }
+    else
+        return 0;    
+}
+
 bool User::password_validation(std::string* password)
 {   
     std::string hash_password = password_hash(password);
@@ -86,11 +106,24 @@ bool User::password_validation(std::string* password)
     else
         return 0;
 }
+
 void User::change_name()
 {
+    std::string new_name {};
     std::cout << "Enter new name: ";
-    std::cin >> this->name;
+    std::cin >> new_name;
+    if (new_name != "")
+    {
+        this->name = new_name;
+        std::cout << "Name change successful" << std::endl;
+        save_user();    
+    }
+    else
+    {
+        std::cout << "Name is not valid" << std::endl;
+    }
 }
+
 void User::change_email()
 {
     std::string new_email {};
@@ -100,12 +133,14 @@ void User::change_email()
     {
         this->email = new_email;
         std::cout << "Email change successful" << std::endl;
+        save_user();
     }
     else
     {
         std::cout << "Email is not valid. Try again" << std::endl;
     }
 }
+
 void User::change_password(std::string* old_password)
 {
     std::string hash_old_password = password_hash(old_password);
@@ -118,6 +153,7 @@ void User::change_password(std::string* old_password)
         {
             this->password = password_hash(&new_password);
             std::cout << "Password change successful" << std::endl;
+            save_user();
         }
         else
         {
@@ -127,13 +163,33 @@ void User::change_password(std::string* old_password)
         }
     }
 }
-void User::change_phone(std::string* phone)
+
+void User::change_phone()
 {
-    if (is_valid_phone(phone))
-        this->phone = *phone;
+    std::string phone {};
+    std::cout << "Enter new phone number: ";
+    std::cin >> phone;
+    if (is_valid_phone(&phone))
+    {
+        this->phone = phone;
+        std::cout << "Phone number change successful" << std::endl;
+        save_user();
+    }
     else
     {
         std::cout << "Phone number is not valid. Try again" << std::endl;
     }
 }
 
+std::string User::get_name()
+{
+    return name;
+}
+std::string User::get_email()
+{
+    return email;
+}
+std::string User::get_phone()
+{
+    return phone;
+}

@@ -12,7 +12,7 @@ bool is_valid_password(std::string* password)
 
 bool is_valid_email(std::string* email)
 {
-    static const std::regex pattern(R"(^[a-z]{3,}@[a-z]{2,}\.[a-z]{2,4}$)");
+    static const std::regex pattern(R"(^([a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-z]+)$)");
     return std::regex_match(*email, pattern);
 }
 bool is_valid_phone(std::string* phone)

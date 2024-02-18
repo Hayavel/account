@@ -14,10 +14,11 @@ RegEx для пароля, почты, телефона, логина           
 Функция смены имени                                         - сделано
 Функция смены контактных данных (почта, телефон)            - сделано
 Вход в личный кабинет                                       - сделано
+Удаление аккаунта                                           - сделано
 
 
-Какой-то фукнционал с аккаунтом                             -
-Попробовать переделать через ссылки и указатели             -
+Какой-то фукнционал с аккаунтом                             - 
+Попробовать переделать через ссылки и указатели             - сделано
 */
 
 
@@ -93,5 +94,57 @@ int main()
         }
         while (!active_user.password_validation(&password));
         std::cout << "Login successful" << std::endl;
+        std::string action;
+        while (true)
+        {
+            std::cout << "\nSettings[quit]:" << "\t" << "Actions:" << "\n"; 
+            std::cout << "- change name" << "\t" << "- get name" << "\n"; 
+            std::cout << "- change email" << "\t" << "- get email" << "\n";
+            std::cout << "- change phone" << "\t" << "- get phone" << "\n";
+            std::cout << "- change password" << "\t" << "- get something" << "\n";
+            std::cout << "- !delete account" << std::endl; 
+            std::cout << "Enter: "; 
+            std::getline(std::cin>>std::ws, action);
+            if (action == "change name")
+                active_user.change_name();
+            else if (action == "change email")
+                active_user.change_email();
+            else if (action == "change phone")
+                active_user.change_phone();
+            else if (action == "change password")
+            {   
+                std::string old_password {};
+                std::cout << "Enter old password";
+                std::cin >> old_password;
+                active_user.change_password(&old_password);
+            }
+            else if(action == "!delete account")
+            {
+                if (active_user.delete_user())
+                    break;
+            }
+            else if(action == "get name")
+            {
+                std::cout << "\nYour name: " << active_user.get_name() << std::endl;
+
+            }
+            else if(action == "get email")
+            {
+                std::cout << "\nYour email: " << active_user.get_email() << std::endl;
+
+            }
+            else if(action == "get phone")
+            {
+                std::cout << "\nYour phone: " << active_user.get_phone() << std::endl;
+                
+            }
+            else if (action == "quit")
+                break;
+            else
+            {
+                std::cout << "\nSomething wrong" << std::endl;
+            }
+
+        }
     }
 }
