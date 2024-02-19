@@ -5,7 +5,7 @@
 #include <string>
 
 /*
-!!Шифрование пароля                                         -
+!!Шифрование пароля                                         - сделано
 Создание нового пользователя                                - сделано
 RegEx для пароля, почты, телефона, логина                   - сделано
 Проверка существует ли пользователь при создании            - сделано
@@ -114,7 +114,7 @@ int main()
             else if (action == "change password")
             {   
                 std::string old_password {};
-                std::cout << "Enter old password";
+                std::cout << "Enter old password: ";
                 std::cin >> old_password;
                 active_user.change_password(&old_password);
             }

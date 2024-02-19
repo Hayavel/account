@@ -1,3 +1,8 @@
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/hex.h"
+#include "cryptopp/files.h"
+
 #include "valid.h"
 
 #include <iostream>

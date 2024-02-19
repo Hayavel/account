@@ -1,3 +1,8 @@
+#include "cryptopp/cryptlib.h"
+#include "cryptopp/sha.h"
+#include "cryptopp/hex.h"
+#include "cryptopp/files.h"
+
 #include "user.h"
 #include "valid.h"
 
@@ -47,15 +52,24 @@ void User::load_user(std::string* login)
 
 std::string User::password_hash(std::string* password)
 {
-
-    return *password;
+    std::string pw = *password;
+    CryptoPP::SHA256 hash;
+    CryptoPP::byte digest[CryptoPP::SHA1::DIGESTSIZE];
+    hash.CalculateDigest(digest, (const CryptoPP::byte*)pw.c_str(), pw.size());
+    std::string output;
+    CryptoPP::HexEncoder encoder;
+    CryptoPP::StringSink test = CryptoPP::StringSink(output);
+    encoder.Attach(new CryptoPP::StringSink(output));
+    encoder.Put(digest, sizeof(digest));
+    encoder.MessageEnd();
+    return output;
 }
 
 
 User::User(std::string login, std::string password, std::string name, std::string email="", std::string phone="")
 {
     this->login = login;
-    this->password = password;
+    this->password = password_hash(&password);
     this->name = name;
     this->email = email;
     this->phone = phone;
