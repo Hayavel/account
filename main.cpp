@@ -2,7 +2,9 @@
 #include "user.h"
 
 #include <iostream>
+#include <iomanip>
 #include <string>
+#include <filesystem>
 
 /*
 !!Шифрование пароля                                         - сделано
@@ -38,6 +40,8 @@ int main()
         std::string email {""};
         std::string phone {""};
 
+        if (!std::filesystem::is_directory("users"));
+            std::filesystem::create_directory("users");
 
         std::cout << "\t* - required to fill out" << std::endl;
         do
@@ -96,14 +100,15 @@ int main()
         std::cout << "Login successful" << std::endl;
         std::string action;
         while (true)
-        {
-            std::cout << "\nSettings[quit]:" << "\t" << "Actions:" << "\n"; 
-            std::cout << "- change name" << "\t" << "- get name" << "\n"; 
-            std::cout << "- change email" << "\t" << "- get email" << "\n";
-            std::cout << "- change phone" << "\t" << "- get phone" << "\n";
-            std::cout << "- change password" << "\t" << "- get something" << "\n";
-            std::cout << "- !delete account" << std::endl; 
-            std::cout << "Enter: "; 
+        {   
+
+            std::cout << "\n" << std::setw(9) << "Settings[quit]:" << std::setw(20) << "Actions:" << "\n"; 
+            std::cout << std::setw(9) << "- change name" << std::setw(20) << "- get name" << "\n"; 
+            std::cout << std::setw(9) <<"- change email" << std::setw(20) << "- get email" << "\n";
+            std::cout << std::setw(9) <<"- change phone" << std::setw(20) << "- get phone" << "\n";
+            std::cout << std::setw(9) <<"- change password" << std::setw(20) << "- get something" << "\n";
+            std::cout << std::setw(9) <<"- !delete account" << std::endl; 
+            std::cout <<"Enter: "; 
             std::getline(std::cin>>std::ws, action);
             if (action == "change name")
                 active_user.change_name();
