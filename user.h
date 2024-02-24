@@ -3,6 +3,7 @@
 #include "cryptopp/hex.h"
 #include "cryptopp/files.h"
 
+#include "const.h"
 #include "valid.h"
 
 #include <iostream>
@@ -12,8 +13,6 @@
 
 #ifndef USER_H
 #define USER_H
-
-bool search_user(std::string*);
 
 
 class User

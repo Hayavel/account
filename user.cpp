@@ -3,6 +3,7 @@
 #include "cryptopp/hex.h"
 #include "cryptopp/files.h"
 
+#include "const.h"
 #include "user.h"
 #include "valid.h"
 
@@ -11,31 +12,10 @@
 #include <fstream>
 
 
-
-std::string path = "users/";
-
-bool search_user(std::string* login)
-{
-    std::ifstream exist;
-    exist.open(path + *login + ".txt");
-    
-    if (exist) // If file exist
-    {   
-        exist.close();
-        return 1;
-    }
-    else
-    {
-        exist.close();
-        return 0;
-    }
-}
-
-
 void User::load_user(std::string* login)
 {
     std::ifstream load;
-    load.open(path + *login + ".txt");
+    load.open(users_path + *login + ".txt");
     if (load.is_open())
     {   
         std::string* data[5] {&this->login, &this->password, &this->username, &this->email, &this->phone};
@@ -87,7 +67,7 @@ User::User(std::string login)
 void User::save_user() const
 {
     std::ofstream save;
-    save.open(path+login+".txt");
+    save.open(users_path+login+".txt");
     if (save.is_open())
     {
         save << "login:" << login << "\n";
@@ -116,7 +96,7 @@ bool User::delete_user() const
     std::cin >> answer;
     if (answer == "Y")
     {
-        std::remove((path+login+".txt").c_str());
+        std::remove((users_path+login+".txt").c_str());
         std::cout << "Account has been deleted" << std::endl;
         return 1;
     }

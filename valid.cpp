@@ -1,3 +1,4 @@
+#include "const.h"
 #include "valid.h"
 
 #include <string>
@@ -7,7 +8,7 @@
 
 bool is_valid_username(std::string* username)
 {
-    if (!std::filesystem::exists("usernames.txt"))
+    if (!std::filesystem::exists(usernames_path))
             return 1;
     else
     {
@@ -43,4 +44,21 @@ bool is_valid_phone(std::string* phone)
 {
     static const std::regex pattern(R"(^[\+]?\d{11}$)");
     return std::regex_match(*phone, pattern);
+}
+
+bool search_user(std::string* login)
+{
+    std::ifstream exist;
+    exist.open(users_path + *login + ".txt");
+    
+    if (exist) // If file exist
+    {   
+        exist.close();
+        return 1;
+    }
+    else
+    {
+        exist.close();
+        return 0;
+    }
 }
