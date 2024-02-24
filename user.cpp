@@ -38,7 +38,7 @@ void User::load_user(std::string* login)
     load.open(path + *login + ".txt");
     if (load.is_open())
     {   
-        std::string* data[5] {&this->login, &this->password, &this->name, &this->email, &this->phone};
+        std::string* data[5] {&this->login, &this->password, &this->username, &this->email, &this->phone};
         std::string line;
         for (int i {}; i < 5; i++)
         {   
@@ -48,6 +48,7 @@ void User::load_user(std::string* login)
             *data[i] = line;
         }
     }
+    load.close();
 }
 
 std::string User::password_hash(std::string* password)
@@ -66,14 +67,16 @@ std::string User::password_hash(std::string* password)
 }
 
 
-User::User(std::string login, std::string password, std::string name, std::string email="", std::string phone="")
+User::User(std::string login, std::string password, std::string username, std::string email="", std::string phone="")
 {
     this->login = login;
     this->password = password_hash(&password);
-    this->name = name;
+    this->username = username;
     this->email = email;
     this->phone = phone;
     std::cout << "Account has been created" << std::endl;
+    save_user();
+    save_username();
 }
 
 User::User(std::string login)
@@ -89,12 +92,21 @@ void User::save_user() const
     {
         save << "login:" << login << "\n";
         save << "password:"<< password << "\n";
-        save << "name:" << name << "\n";
+        save << "username:" << username << "\n";
         save << "email:" << email << "\n";
         save << "phone:" << phone;
     }
     save.close();
     std::cout << "Account has been saved" << std::endl;
+}
+
+void User::save_username() const
+{
+    std::ofstream save;
+    save.open("usernames.txt", std::ios::app);
+    if (save.is_open())
+        save << username << std::endl;
+    save.close();
 }
 
 bool User::delete_user() const
@@ -121,20 +133,24 @@ bool User::password_validation(std::string* password)
         return 0;
 }
 
-void User::change_name()
+void User::change_username()
 {
-    std::string new_name {};
-    std::cout << "Enter new name: ";
-    std::cin >> new_name;
-    if (new_name != "")
+    std::string new_username {};
+    std::cout << "Enter new username: ";
+    std::cin >> new_username;
+    if (new_username != "" && is_valid_username(&new_username))
     {
-        this->name = new_name;
-        std::cout << "Name change successful" << std::endl;
-        save_user();    
+        this->username = new_username;
+        std::cout << "Username change successful" << std::endl;
+        save_user();
+        save_username();   
     }
     else
     {
-        std::cout << "Name is not valid" << std::endl;
+        if (new_username == "")
+            std::cout << "Username is not valid" << std::endl;
+        else
+            std::cout << "Username has already been taken" << std::endl;
     }
 }
 
@@ -195,9 +211,9 @@ void User::change_phone()
     }
 }
 
-std::string User::get_name()
+std::string User::get_username()
 {
-    return name;
+    return username;
 }
 std::string User::get_email()
 {

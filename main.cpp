@@ -19,8 +19,14 @@ RegEx для пароля, почты, телефона, логина           
 Удаление аккаунта                                           - сделано
 
 
-Какой-то фукнционал с аккаунтом                             - 
 Попробовать переделать через ссылки и указатели             - сделано
+Какой-то фукнционал с аккаунтом                             - 
+    Отправка сообщений и их шифрование                      -
+    Список друзей                                           -
+    Никнеймы(Юзернеймы)                                     - сделано
+Перенести некоторые методы из user в valid                  -
+Сделать Регистрацию, Логин и Действия через хэш-таблицы     -
+(по возможности) убрать повторные вызовы библиотек          -
 */
 
 
@@ -36,7 +42,7 @@ int main()
 
     if (choice == "Register")
     {       
-        std::string name {""};
+        std::string username {""};
         std::string email {""};
         std::string phone {""};
 
@@ -53,8 +59,12 @@ int main()
         }
         while (search_user(&login) || login=="");
 
-        std::cout << "*Enter name: ";
-        std::cin >> name;
+        do
+        {
+            std::cout << "*Enter username: ";
+            std::cin >> username;
+        }
+        while(!is_valid_username(&username) || username == "");
         do
         {
             std::cout << "Enter email: ";
@@ -74,8 +84,7 @@ int main()
         }
         while (!is_valid_password(&password));
 
-        User new_user {login, password, name, email, phone};
-        new_user.save_user();
+        User new_user {login, password, username, email, phone};
     }
     else if (choice == "Login")
     {
@@ -103,15 +112,15 @@ int main()
         {   
 
             std::cout << "\n" << std::setw(9) << "Settings[quit]:" << std::setw(20) << "Actions:" << "\n"; 
-            std::cout << std::setw(9) << "- change name" << std::setw(20) << "- get name" << "\n"; 
+            std::cout << std::setw(9) << "- change username" << std::setw(20) << "- get username" << "\n"; 
             std::cout << std::setw(9) <<"- change email" << std::setw(20) << "- get email" << "\n";
             std::cout << std::setw(9) <<"- change phone" << std::setw(20) << "- get phone" << "\n";
             std::cout << std::setw(9) <<"- change password" << std::setw(20) << "- get something" << "\n";
             std::cout << std::setw(9) <<"- !delete account" << std::endl; 
             std::cout <<"Enter: "; 
             std::getline(std::cin>>std::ws, action);
-            if (action == "change name")
-                active_user.change_name();
+            if (action == "change username")
+                active_user.change_username();
             else if (action == "change email")
                 active_user.change_email();
             else if (action == "change phone")
@@ -128,9 +137,9 @@ int main()
                 if (active_user.delete_user())
                     break;
             }
-            else if(action == "get name")
+            else if(action == "get username")
             {
-                std::cout << "\nYour name: " << active_user.get_name() << std::endl;
+                std::cout << "\nYour username: " << active_user.get_username() << std::endl;
 
             }
             else if(action == "get email")

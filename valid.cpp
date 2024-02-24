@@ -2,7 +2,31 @@
 
 #include <string>
 #include <regex>
+#include <fstream>
+#include <filesystem>
 
+bool is_valid_username(std::string* username)
+{
+    if (!std::filesystem::exists("usernames.txt"))
+            return 1;
+    else
+    {
+        std::ifstream users;
+        std::string line;
+        users.open("usernames.txt");
+        while (users)
+        {
+            std::getline(users, line);
+            if (line == *username)
+            {
+                users.close();
+                return 0;
+            }
+        }
+        users.close();
+        return 1;
+    }
+}
 
 bool is_valid_password(std::string* password)
 {
