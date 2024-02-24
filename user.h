@@ -38,7 +38,7 @@ public:
     bool password_validation(std::string*);
     void change_username();
     void change_email();
-    void change_password(std::string*);
+    void change_password();
     void change_phone();
     std::string get_username();
     std::string get_email();

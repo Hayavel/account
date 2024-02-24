@@ -175,9 +175,12 @@ void User::change_email()
     }
 }
 
-void User::change_password(std::string* old_password)
+void User::change_password()
 {
-    std::string hash_old_password = password_hash(old_password);
+    std::string old_password {};
+    std::cout << "Enter old password: ";
+    std::cin >> old_password;
+    std::string hash_old_password = password_hash(&old_password);
     if (hash_old_password == this->password)
     {
         std::string new_password {};

@@ -26,7 +26,6 @@ RegEx для пароля, почты, телефона, логина           
     Список друзей                                           -
     Никнеймы(Юзернеймы)                                     - сделано
 Перенести некоторые методы из user в valid                  - сделано
-Сделать Регистрацию, Логин и Действия через хэш-таблицы     -
 (по возможности) убрать повторные вызовы библиотек          -
 */
 
@@ -127,12 +126,8 @@ int main()
             else if (action == "change phone")
                 active_user.change_phone();
             else if (action == "change password")
-            {   
-                std::string old_password {};
-                std::cout << "Enter old password: ";
-                std::cin >> old_password;
-                active_user.change_password(&old_password);
-            }
+                active_user.change_password();
+            
             else if(action == "!delete account")
             {
                 if (active_user.delete_user())
@@ -141,17 +136,14 @@ int main()
             else if(action == "get username")
             {
                 std::cout << "\nYour username: " << active_user.get_username() << std::endl;
-
             }
             else if(action == "get email")
             {
                 std::cout << "\nYour email: " << active_user.get_email() << std::endl;
-
             }
             else if(action == "get phone")
             {
                 std::cout << "\nYour phone: " << active_user.get_phone() << std::endl;
-                
             }
             else if (action == "quit")
                 break;
