@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
 
 
 void User::load_user(std::string* login)
@@ -96,12 +97,34 @@ bool User::delete_user() const
     std::cin >> answer;
     if (answer == "Y")
     {
+        delete_username();
         std::remove((users_path+login+".txt").c_str());
         std::cout << "Account has been deleted" << std::endl;
         return 1;
     }
     else
         return 0;    
+}
+
+void User::delete_username() const
+{
+    std::fstream users;
+    std::vector<std::string> usernames;
+    std::string line;
+    users.open(usernames_path, std::ios::in);
+    while (users)
+    {
+        std::getline(users, line);
+        usernames.push_back(line);
+    }
+    users.close();
+    users.open(usernames_path, std::ios::out);
+    for (int i {}; i < usernames.size()-1; i++)
+    {
+        if (usernames[i] != username)
+            users << usernames[i] << std::endl;
+    }
+    users.close();
 }
 
 bool User::password_validation(std::string* password)
@@ -120,10 +143,11 @@ void User::change_username()
     std::cin >> new_username;
     if (new_username != "" && is_valid_username(&new_username))
     {
+        delete_username();
         this->username = new_username;
-        std::cout << "Username change successful" << std::endl;
         save_user();
         save_username();   
+        std::cout << "Username change successful" << std::endl;
     }
     else
     {

@@ -34,6 +34,7 @@ public:
     void save_user() const;
     void save_username() const;
     bool delete_user() const;
+    void delete_username() const;
     bool password_validation(std::string*);
     void change_username();
     void change_email();
