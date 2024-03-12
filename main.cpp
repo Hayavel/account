@@ -54,37 +54,37 @@ int main()
         {
             std::cout << "*Enter login: ";
             std::cin >> login;
-            if (search_user(&login))
+            if (search_user(login))
                 std::cout << "User exist" << std::endl;
         }
-        while (search_user(&login) || login=="");
+        while (search_user(login) || login=="");
 
         do
         {
             std::cout << "*Enter username: ";
             std::cin >> username;
         }
-        while(!is_valid_username(&username) || username == "");
+        while(!is_valid_username(username) || username == "");
         do
         {
             std::cout << "Enter email: ";
             std::cin >> email;
         }
-        while (!is_valid_email(&email));
+        while (!is_valid_email(email));
         do
         {
             std::cout << "Enter phone: ";
             std::cin >> phone;
         }
-        while (!is_valid_phone(&phone));
+        while (!is_valid_phone(phone));
         do
         {
             std::cout << "*Enter password: ";
             std::cin >> password;
         }
-        while (!is_valid_password(&password));
+        while (!is_valid_password(password));
 
-        User new_user {login, password, username, email, phone};
+        const User new_user {login, password, username, email, phone};
     }
     else if (choice == "Login")
     {
@@ -92,20 +92,20 @@ int main()
         {
             std::cout << "Enter login: ";
             std::cin >> login;
-            if (!search_user(&login))
+            if (!search_user(login))
                     std::cout << "User does not exist" << std::endl;
         }
-        while (!search_user(&login));
+        while (!search_user(login));
         User active_user {login};
         
         do
         {
             std::cout << "Enter password: ";
             std::cin >> password;
-            if (!active_user.password_validation(&password))
+            if (!active_user.password_validation(password))
                 std::cout << "Wrong password" << std::endl;
         }
-        while (!active_user.password_validation(&password));
+        while (!active_user.password_validation(password));
         std::cout << "Login successful" << std::endl;
         std::string action;
         while (true)

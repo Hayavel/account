@@ -6,7 +6,7 @@
 #include <fstream>
 #include <filesystem>
 
-bool is_valid_username(std::string* username)
+bool is_valid_username(std::string& username)
 {
     if (!std::filesystem::exists(usernames_path))
             return 1;
@@ -18,7 +18,7 @@ bool is_valid_username(std::string* username)
         while (users)
         {
             std::getline(users, line);
-            if (line == *username)
+            if (line == username)
             {
                 users.close();
                 return 0;
@@ -29,27 +29,27 @@ bool is_valid_username(std::string* username)
     }
 }
 
-bool is_valid_password(std::string* password)
+bool is_valid_password(std::string& password)
 {
     static const std::regex pattern(R"(^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$)");
-    return std::regex_match(*password, pattern);
+    return std::regex_match(password, pattern);
 }
 
-bool is_valid_email(std::string* email)
+bool is_valid_email(std::string& email)
 {
     static const std::regex pattern(R"(^([a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-z]+)$)");
-    return std::regex_match(*email, pattern);
+    return std::regex_match(email, pattern);
 }
-bool is_valid_phone(std::string* phone)
+bool is_valid_phone(std::string& phone)
 {
     static const std::regex pattern(R"(^[\+]?\d{11}$)");
-    return std::regex_match(*phone, pattern);
+    return std::regex_match(phone, pattern);
 }
 
-bool search_user(std::string* login)
+bool search_user(std::string& login)
 {
     std::ifstream exist;
-    exist.open(users_path + *login + ".txt");
+    exist.open(users_path + login + ".txt");
     
     if (exist) // If file exist
     {   

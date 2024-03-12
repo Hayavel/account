@@ -25,8 +25,8 @@ private:
     std::string email;
     std::string phone;
 
-    void load_user(std::string*);
-    std::string password_hash(std::string*);
+    void load_user(std::string&);
+    std::string password_hash(std::string&) const;
 public:
     User(std::string login, std::string password, std::string username, std::string email, std::string phone);
     User(std::string login);
@@ -35,14 +35,14 @@ public:
     void save_username() const;
     bool delete_user() const;
     void delete_username() const;
-    bool password_validation(std::string*);
+    bool password_validation(std::string&) const;
     void change_username();
     void change_email();
     void change_password();
     void change_phone();
-    std::string get_username();
-    std::string get_email();
-    std::string get_phone();
+    std::string get_username() const;
+    std::string get_email() const;
+    std::string get_phone() const;
 };
 
 #endif

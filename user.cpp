@@ -13,10 +13,10 @@
 #include <vector>
 
 
-void User::load_user(std::string* login)
+void User::load_user(std::string& login)
 {
     std::ifstream load;
-    load.open(users_path + *login + ".txt");
+    load.open(users_path + login + ".txt");
     if (load.is_open())
     {   
         std::string* data[5] {&this->login, &this->password, &this->username, &this->email, &this->phone};
@@ -32,9 +32,9 @@ void User::load_user(std::string* login)
     load.close();
 }
 
-std::string User::password_hash(std::string* password)
+std::string User::password_hash(std::string& password) const
 {
-    std::string pw = *password;
+    std::string pw = password;
     CryptoPP::SHA256 hash;
     CryptoPP::byte digest[CryptoPP::SHA1::DIGESTSIZE];
     hash.CalculateDigest(digest, (const CryptoPP::byte*)pw.c_str(), pw.size());
@@ -51,7 +51,7 @@ std::string User::password_hash(std::string* password)
 User::User(std::string login, std::string password, std::string username, std::string email="", std::string phone="")
 {
     this->login = login;
-    this->password = password_hash(&password);
+    this->password = password_hash(password);
     this->username = username;
     this->email = email;
     this->phone = phone;
@@ -62,7 +62,7 @@ User::User(std::string login, std::string password, std::string username, std::s
 
 User::User(std::string login)
 {
-    load_user(&login);
+    load_user(login);
 }
 
 void User::save_user() const
@@ -127,7 +127,7 @@ void User::delete_username() const
     users.close();
 }
 
-bool User::password_validation(std::string* password)
+bool User::password_validation(std::string& password) const
 {   
     std::string hash_password = password_hash(password);
     if (hash_password == this->password )
@@ -141,7 +141,7 @@ void User::change_username()
     std::string new_username {};
     std::cout << "Enter new username: ";
     std::cin >> new_username;
-    if (new_username != "" && is_valid_username(&new_username))
+    if (new_username != "" && is_valid_username(new_username))
     {
         delete_username();
         this->username = new_username;
@@ -163,7 +163,7 @@ void User::change_email()
     std::string new_email {};
     std::cout << "Enter new email: ";
     std::cin >> new_email;
-    if (is_valid_email(&new_email))
+    if (is_valid_email(new_email))
     {
         this->email = new_email;
         std::cout << "Email change successful" << std::endl;
@@ -180,15 +180,15 @@ void User::change_password()
     std::string old_password {};
     std::cout << "Enter old password: ";
     std::cin >> old_password;
-    std::string hash_old_password = password_hash(&old_password);
+    std::string hash_old_password = password_hash(old_password);
     if (hash_old_password == this->password)
     {
         std::string new_password {};
         std::cout << "Enter new password: ";
         std::cin >> new_password;
-        if (is_valid_password(&new_password))
+        if (is_valid_password(new_password))
         {
-            this->password = password_hash(&new_password);
+            this->password = password_hash(new_password);
             std::cout << "Password change successful" << std::endl;
             save_user();
         }
@@ -206,7 +206,7 @@ void User::change_phone()
     std::string phone {};
     std::cout << "Enter new phone number: ";
     std::cin >> phone;
-    if (is_valid_phone(&phone))
+    if (is_valid_phone(phone))
     {
         this->phone = phone;
         std::cout << "Phone number change successful" << std::endl;
@@ -218,15 +218,15 @@ void User::change_phone()
     }
 }
 
-std::string User::get_username()
+std::string User::get_username() const
 {
     return username;
 }
-std::string User::get_email()
+std::string User::get_email() const
 {
     return email;
 }
-std::string User::get_phone()
+std::string User::get_phone() const
 {
     return phone;
 }
